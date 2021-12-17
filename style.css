@@ -43,6 +43,7 @@ h1 {
   justify-content: center;
   align-items: end;
   margin: 0 auto;
+  margin-bottom: 30px;
 }
 
 .input-block {
@@ -64,15 +65,42 @@ input {
   outline: none;
   box-shadow: 0 2px 4px 2px rgb(0 0 0 / 20%);
   font-size: 16px;
+  cursor: pointer;
 }
 
 button {
   display: flex;
   align-items: center;
-  background-color: #fff;
-  border: 1px solid #fff;
+  background-color: #515e62;
+  border: 1px solid #515e62;
+  color: #fff;
   border-radius: 4px;
   outline: none;
-  padding: 5px 5px;
+  padding: 5px 10px;
+  box-shadow: 0 2px 4px 2px rgb(0 0 0 / 20%);
   font-size: 16px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #fff;
+  border: 1px solid #fff;
+  color: #000;
+}
+
+#content-page {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin: 0 auto 10px;
+}
+
+.spend-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+img {
+  width: 20px;
+  height: 20px;
+  margin-right: 15px;
 }
