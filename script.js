@@ -134,8 +134,6 @@ const saveEditSpend = (index) => {
   allSpends[index].text = inputResultWhere;
   allSpends[index].num = inputResultHowMuch;
   editSpends = null;
-  // inputResultWhere = '';
-  // inputResultHowMuch = null;
   localStorage.setItem('spends', JSON.stringify(allSpends));
   render();
 };
