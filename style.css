@@ -68,6 +68,17 @@ input {
   cursor: pointer;
 }
 
+input::placeholder {
+  opacity: 0.4;
+  font-size: 12px;
+}
+
+input:focus::placeholder {
+  color: transparent;
+  /* opacity: 1;
+  transition: opacity 0.3s easy; */
+}
+
 button {
   display: flex;
   align-items: center;
@@ -81,6 +92,7 @@ button {
   font-size: 16px;
   cursor: pointer;
 }
+
 button:hover {
   background-color: #fff;
   border: 1px solid #fff;
@@ -94,10 +106,27 @@ button:hover {
   margin: 0 auto 10px;
 }
 
+.spends-total {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 30px;
+}
+
 .spend-container {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.spend-container, img:last-child {
+  margin-right: 0;
+}
+
+span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 150px;
 }
 
 img {
