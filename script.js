@@ -63,10 +63,10 @@ const render = () => {
       container.appendChild(rightBlock)
 
       const date = document.createElement('span');
-      let currentDate = new Date();
-      let day = currentDate.getDate();
-      let month = currentDate.getMonth() + 1;
-      let year = currentDate.getFullYear();
+      const currentDate = new Date();
+      const day = currentDate.getDate();
+      const month = currentDate.getMonth() + 1;
+      const year = currentDate.getFullYear();
       date.innerText = day + '.' + month + '.' + year;
       rightBlock.appendChild(date);
 
