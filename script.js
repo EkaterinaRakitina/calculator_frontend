@@ -58,24 +58,39 @@ const render = () => {
       where.innerText = text;
       container.appendChild(where);
 
+      const rightBlock = document.createElement('div');
+      rightBlock.className = 'spend-right-block';
+      container.appendChild(rightBlock)
+
       const date = document.createElement('span');
-      container.appendChild(date);
+      let currentDate = new Date();
+      let day = currentDate.getDate();
+      let month = currentDate.getMonth() + 1;
+      let year = currentDate.getFullYear();
+      date.innerText = day + '.' + month + '.' + year;
+      rightBlock.appendChild(date);
 
       const howMuch = document.createElement('span');
       howMuch.className = 'spend-num';
       howMuch.innerText = `${num} p.`;
-      container.appendChild(howMuch);
+      rightBlock.appendChild(howMuch);
+
+      const imgBlock = document.createElement('div');
+      imgBlock.className = 'image-block';
+      rightBlock.appendChild(imgBlock);
 
       const editIcon = document.createElement('img');
       editIcon.src = 'img/edit.svg';
       editIcon.onclick = () => editSpendFunction(index);
-      container.appendChild(editIcon);
+      imgBlock.appendChild(editIcon);
 
       const deleteIcon = document.createElement('img');
       deleteIcon.src = 'img/delete.svg';
       deleteIcon.onclick = () => removeSpend(index);
-      container.appendChild(deleteIcon);
+      imgBlock.appendChild(deleteIcon);
     } else {
+      container.className = 'spend-container spend-container-edit';
+
       inputWhere = document.createElement('input');
       inputWhere.type = 'text';
       inputWhere.value = text;
@@ -84,23 +99,31 @@ const render = () => {
       };
       container.appendChild(inputWhere);
 
+      const rightBlockEdit = document.createElement('div');
+      rightBlockEdit.className = 'spend-right-block-edit';
+      container.appendChild(rightBlockEdit)
+
       inputHowMuch = document.createElement('input');
       inputHowMuch.type = 'number';
       inputHowMuch.value = num;
       inputHowMuch.onchange = (event) => {
         inputResultHowMuch = event.target.value;
       };
-      container.appendChild(inputHowMuch);
+      rightBlockEdit.appendChild(inputHowMuch);
+
+      const imgBlock = document.createElement('div');
+      imgBlock.className = 'image-block';
+      rightBlockEdit.appendChild(imgBlock);
 
       const doneIcon = document.createElement('img');
       doneIcon.src = 'img/done.svg';
       doneIcon.onclick = () => saveEditSpend(index);
-      container.appendChild(doneIcon);
+      imgBlock.appendChild(doneIcon);
 
       const closeIcon = document.createElement('img');
       closeIcon.src = 'img/cancel.svg';
       closeIcon.onclick = () => closeSpend(index);
-      container.appendChild(closeIcon);
+      imgBlock.appendChild(closeIcon);
     }
 
     content.appendChild(container);

@@ -75,13 +75,12 @@ input::placeholder {
 
 input:focus::placeholder {
   color: transparent;
-  /* opacity: 1;
-  transition: opacity 0.3s easy; */
 }
 
 button {
   display: flex;
   align-items: center;
+  justify-content: center;
   background-color: #515e62;
   border: 1px solid #515e62;
   color: #fff;
@@ -104,6 +103,7 @@ button:hover {
   flex-direction: column;
   width: 60%;
   margin: 0 auto 10px;
+  font-size: 18px;
 }
 
 .spends-total {
@@ -118,15 +118,34 @@ button:hover {
   margin-bottom: 15px;
 }
 
-.spend-container, img:last-child {
+.spend-container,
+img:last-child {
   margin-right: 0;
+}
+
+.spend-right-block {
+  display: flex;
+}
+
+.spend-right-block-edit {
+  display: flex;
+  align-items: center;
+}
+
+.spend-right-block-edit input {
+  margin-right: 15px;
+}
+
+.spend-text {
+  width: 200px;
 }
 
 span {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 150px;
+  width: 100px;
+  margin-right: 25px;
 }
 
 img {
@@ -134,4 +153,106 @@ img {
   height: 20px;
   margin-right: 15px;
   cursor: pointer;
+}
+
+@media screen and (max-width: 1200px) {
+  #content-page {
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: 1050px) {
+  #content-page {
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #content-page {
+    width: 100%;
+  }
+  span {
+    width: 90px;
+    margin-right: 10px;
+  }
+}
+
+@media screen and (max-width: 660px) {
+  .container {
+    width: 85%;
+  }
+  .calculator-wrapper {
+    flex-direction: column;
+  }
+
+  .input-block {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  button {
+    margin-top: 15px;
+    padding: 5px 0;
+    width: 35%;
+  }
+
+  #content-page {
+    width: 100%;
+  }
+
+  .spend-container {
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .spend-text {
+    width: 50%;
+  }
+
+  .spend-right-block {
+    flex-direction: column;
+  }
+
+  .spend-right-block {
+    text-align: end;
+  }
+
+  span {
+    margin-right: 0;
+  }
+
+  .spend-num {
+    margin-bottom: 15px;
+  }
+
+  .spend-container-edit {
+    align-items: flex-start;
+  }
+
+  .spend-right-block-edit {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .spend-right-block-edit input {
+    margin-bottom: 10px;
+    margin-right: 0;
+    width: 42%;
+  }
+}
+
+@media screen and (max-width: 540px) {
+  body {
+    background: rgb(179 196 200);
+    height: 100%;
+  }
+
+  body::before {
+    position: relative;
+  }
+
+  .spend-right-block-edit input {
+    width: 60%;
+  }
 }
