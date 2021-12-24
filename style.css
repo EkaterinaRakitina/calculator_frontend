@@ -130,10 +130,12 @@ img:last-child {
 .spend-right-block-edit {
   display: flex;
   align-items: center;
+  justify-content: end;
 }
 
 .spend-right-block-edit input {
   margin-right: 15px;
+  width: 30%;
 }
 
 .spend-text {

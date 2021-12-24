@@ -1,32 +1,53 @@
-let allSpends = JSON.parse(localStorage.getItem('spends')) || [];
+let allSpends = [];
 let valueTextInput = '';
 let valueNumInput = null;
+// let valueDate = '';
 let inputWhere = '';
 let inputHowMuch = null;
 let editSpends = null;
 let inputResultWhere = '';
 let inputResultHowMuch = null;
+let inputResultDate = '';
 
-window.onload = init = () => {
+window.onload = init = async () => {
   inputWhere = document.getElementById('where');
   inputWhere.addEventListener('change', updateTextValue);
   inputHowMuch = document.getElementById('how-much');
   inputHowMuch.addEventListener('change', updateNumValue);
+  const resp = await fetch('http://localhost:5000/allSpends', {
+    method: 'GET',
+  });
+  const result = await resp.json();
+  allSpends = result.data;
   render();
 };
 
-const onClickButton = () => {
-  allSpends.push({
-    text: valueTextInput,
-    num: valueNumInput,
+const onClickButton = async () => {
+  const resp = await fetch('http://localhost:5000/createSpend', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      'Access-Control-Allow-Origin': '*',
+    },
+    body: JSON.stringify({
+      text: valueTextInput,
+      date: valueDateFunc(),
+      num: valueNumInput,
+    }),
   });
+
+  const result = await resp.json();
+  allSpends.push(result);
+
   inputWhere.value = '';
   inputHowMuch.value = null;
   valueTextInput = '';
   valueNumInput = null;
-  localStorage.setItem('spends', JSON.stringify(allSpends));
   render();
 };
+
+const valueDateFunc = () =>
+  new Date().toISOString().substring(0, 10).split('-').reverse().join('.');
 
 const updateTextValue = (event) => {
   valueTextInput = event.target.value;
@@ -50,7 +71,7 @@ const render = () => {
     const container = document.createElement('div');
     container.id = `spend-${index}`;
     container.className = 'spend-container';
-    const { text, num } = item;
+    const { text, date, num } = item;
 
     if (editSpends !== index) {
       const where = document.createElement('span');
@@ -60,15 +81,11 @@ const render = () => {
 
       const rightBlock = document.createElement('div');
       rightBlock.className = 'spend-right-block';
-      container.appendChild(rightBlock)
+      container.appendChild(rightBlock);
 
-      const date = document.createElement('span');
-      const currentDate = new Date();
-      const day = currentDate.getDate();
-      const month = currentDate.getMonth() + 1;
-      const year = currentDate.getFullYear();
-      date.innerText = day + '.' + month + '.' + year;
-      rightBlock.appendChild(date);
+      const dateSpend = document.createElement('span');
+      dateSpend.innerText = date;
+      rightBlock.appendChild(dateSpend);
 
       const howMuch = document.createElement('span');
       howMuch.className = 'spend-num';
@@ -86,12 +103,12 @@ const render = () => {
 
       const deleteIcon = document.createElement('img');
       deleteIcon.src = 'img/delete.svg';
-      deleteIcon.onclick = () => removeSpend(index);
+      deleteIcon.onclick = () => removeSpend(item);
       imgBlock.appendChild(deleteIcon);
     } else {
       container.className = 'spend-container spend-container-edit';
 
-      inputWhere = document.createElement('input');
+      const inputWhere = document.createElement('input');
       inputWhere.type = 'text';
       inputWhere.value = text;
       inputWhere.onchange = (event) => {
@@ -101,9 +118,22 @@ const render = () => {
 
       const rightBlockEdit = document.createElement('div');
       rightBlockEdit.className = 'spend-right-block-edit';
-      container.appendChild(rightBlockEdit)
+      container.appendChild(rightBlockEdit);
 
-      inputHowMuch = document.createElement('input');
+      const inputDate = document.createElement('input');
+      inputDate.type = 'date';
+      inputDate.className = 'spend-date';
+      inputDate.value = new Date().toISOString().substring(0, 10);
+      inputDate.setAttribute('min', '2021 - 01 - 01');
+      inputDate.setAttribute('max', '2021 - 12 - 31');
+      console.log(' inputDate.value', inputDate.value);
+
+      inputDate.onchange = (event) => {
+        inputResultDate = event.target.value;
+      };
+      rightBlockEdit.appendChild(inputDate);
+
+      const inputHowMuch = document.createElement('input');
       inputHowMuch.type = 'number';
       inputHowMuch.value = num;
       inputHowMuch.onchange = (event) => {
@@ -131,11 +161,20 @@ const render = () => {
   });
 };
 
-const sumTotal = () =>  allSpends.reduce((prev, next) => prev + +next.num, 0);
+const sumTotal = () => allSpends.reduce((prev, next) => prev + +next.num, 0);
 
-const removeSpend = (index) => {
-  allSpends.splice(index, 1);
-  localStorage.setItem('spends', JSON.stringify(allSpends));
+const removeSpend = async (item) => {
+  const resp = await fetch(`http://localhost:5000/deleteSpend?id=${item._id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      'Access-Control-Allow-Origin': '*',
+    },
+  });
+
+  const result = await resp.json();
+  allSpends = result;
+
   render();
 };
 
@@ -143,20 +182,40 @@ const editSpendFunction = (index) => {
   editSpends = index;
   inputResultWhere = allSpends[index].text;
   inputResultHowMuch = allSpends[index].num;
-  localStorage.setItem('spends', JSON.stringify(allSpends));
+  inputResultDate = allSpends[index].date;
+  // console.log(allSpends[index].date);
   render();
 };
 
 const closeSpend = () => {
   editSpends = null;
-  localStorage.setItem('spends', JSON.stringify(allSpends));
   render();
 };
 
-const saveEditSpend = (index) => {
+const saveEditSpend = async (index) => {
   allSpends[index].text = inputResultWhere;
+  inputResultWhere = '';
   allSpends[index].num = inputResultHowMuch;
+  inputResultHowMuch = '';
+  allSpends[index].date = inputResultDate
+    .slice(0, 10)
+    .split('-')
+    .reverse()
+    .join('.');
+  inputResultDate = '';
+  console.log(allSpends[index].date);
+  const resp = await fetch('http://localhost:5000/changeSpend', {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      'Access-Control-Allow-Origin': '*',
+    },
+    body: JSON.stringify(allSpends[index]),
+  });
+  const result = await resp.json();
+  allSpends = result.data;
   editSpends = null;
-  localStorage.setItem('spends', JSON.stringify(allSpends));
+  // console.log(allSpends);
+
   render();
 };
