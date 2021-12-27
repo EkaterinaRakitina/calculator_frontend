@@ -1,7 +1,6 @@
 let allSpends = [];
 let valueTextInput = '';
 let valueNumInput = null;
-// let valueDate = '';
 let inputWhere = '';
 let inputHowMuch = null;
 let editSpends = null;
@@ -126,7 +125,6 @@ const render = () => {
       inputDate.value = new Date().toISOString().substring(0, 10);
       inputDate.setAttribute('min', '2021 - 01 - 01');
       inputDate.setAttribute('max', '2021 - 12 - 31');
-      console.log(' inputDate.value', inputDate.value);
 
       inputDate.onchange = (event) => {
         inputResultDate = event.target.value;
@@ -183,7 +181,6 @@ const editSpendFunction = (index) => {
   inputResultWhere = allSpends[index].text;
   inputResultHowMuch = allSpends[index].num;
   inputResultDate = allSpends[index].date;
-  // console.log(allSpends[index].date);
   render();
 };
 
@@ -203,7 +200,6 @@ const saveEditSpend = async (index) => {
     .reverse()
     .join('.');
   inputResultDate = '';
-  console.log(allSpends[index].date);
   const resp = await fetch('http://localhost:5000/changeSpend', {
     method: 'PATCH',
     headers: {
@@ -214,8 +210,6 @@ const saveEditSpend = async (index) => {
   });
   const result = await resp.json();
   allSpends = result.data;
-  editSpends = null;
-  // console.log(allSpends);
 
   render();
 };
